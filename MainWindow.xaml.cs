@@ -109,5 +109,10 @@ namespace WhosHome
         {
             ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.Service;
         }
+
+        private void ButtonOutOfService_OnClick(object sender, RoutedEventArgs e)
+        {
+            ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.OutOfService;
+        }
     }
 }

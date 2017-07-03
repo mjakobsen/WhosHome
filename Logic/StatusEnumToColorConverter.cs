@@ -26,6 +26,10 @@ namespace WhosHome.Logic
                     break;
                 case StatusEnum.Service:
                     return Brushes.Yellow;
+                    break;
+                case StatusEnum.OutOfService:
+                    return Brushes.Orange;
+                    break;
                 default:
                     return Brushes.Green;
                     break;

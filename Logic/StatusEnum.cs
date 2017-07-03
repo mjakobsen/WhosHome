@@ -6,5 +6,6 @@
         Busy,
         Home,
         Service,
+        OutOfService,
     }
 }
