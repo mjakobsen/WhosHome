@@ -64,7 +64,8 @@
     </Compile>
     <Compile Include="Logic\BoolToVisibilityConverter.cs" />
     <Compile Include="Logic\StatusEnum.cs" />
-    <Compile Include="Logic\StatusEnumToColorConverter.cs" />
+    <Compile Include="Logic\StatusEnumToForegroundColorConverter.cs" />
+    <Compile Include="Logic\StatusEnumToBackgroundColorConverter.cs" />
     <Compile Include="Logic\Vehicle.cs" />
     <Compile Include="Logic\VehicleTypeEnum.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -97,6 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

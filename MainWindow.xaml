@@ -9,14 +9,22 @@
         SizeToContent="WidthAndHeight"
         Title="MainWindow" Height="300" Width="300">
     <Window.Resources>
-        <l:StatusEnumToColorConverter x:Key="StatusEnumToColorConverter"/>
+        <l:StatusEnumToBackgroundColorConverter x:Key="StatusEnumToBackgroundColorConverter" />
+        <l:StatusEnumToForegroundColorConverter x:Key="StatusEnumToForegroundColorConverter" />
         <l:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
     </Window.Resources>
     <Grid Margin="0">
-        <ListBox Name="lbVehicle" Margin="0" HorizontalContentAlignment="Stretch" Height="{Binding ElementName=LayoutRoot, Path=ActualHeight}" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="Opret køretøj" />
+        </Menu>
+        <ListBox Name="lbVehicle" Margin="0" Grid.Row="1" HorizontalContentAlignment="Stretch" Height="{Binding ElementName=LayoutRoot, Path=ActualHeight}" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Margin="0" Background="{Binding Status, Converter={StaticResource StatusEnumToColorConverter}}" Width="Auto">
+                    <Grid Margin="0" Background="{Binding Status, Converter={StaticResource StatusEnumToBackgroundColorConverter}}" Width="Auto">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto"/>
@@ -28,12 +36,12 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="35"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding Name}" Margin="0" Padding="0,0,10,0" Foreground="White" VerticalAlignment="Center" FontSize="30"/>
-                        <Button Grid.Column="1" Padding="2,0" Content="Service opg" Click="ButtonService_OnClick" Visibility="{Binding IsFire, Converter={StaticResource BoolToVisibilityConverter}}" Background="Yellow" Foreground="Black"></Button>
-                        <Button Grid.Column="2" Padding="2,0" Content="Optaget" Click="ButtonBusy_OnClick" Background="Red" Foreground="White"/>
-                        <Button Grid.Column="3" Padding="2,0" Content="Fri" Click="ButtonIdle_OnClick" Background="Blue" Foreground="White" Width="50"/>
-                        <Button Grid.Column="4" Padding="2,0" Content="Hjemme" Click="ButtonReady_OnClick" Background="Green" Foreground="White"/>
-                        <Button Grid.Column="5" Padding="2,0" Content="Ude af drift" Click="ButtonOutOfService_OnClick" Background="Orange"></Button>
+                        <TextBlock Grid.Column="0" Text="{Binding Name}" Margin="0" Padding="0,0,10,0" Foreground="{Binding Status, Converter={StaticResource StatusEnumToForegroundColorConverter}}" VerticalAlignment="Center" FontSize="30"/>
+                        <Button Grid.Column="1" Padding="2,0,2,0" Content="Service opg" Click="ButtonService_OnClick" Visibility="{Binding IsFire, Converter={StaticResource BoolToVisibilityConverter}}" Background="Yellow" Foreground="Black"></Button>
+                        <Button Grid.Column="2" Padding="2,0,2,0" Content="Optaget" Click="ButtonBusy_OnClick" Background="Red" Foreground="White"/>
+                        <Button Grid.Column="3" Padding="2,0,2,0" Content="Fri" Click="ButtonIdle_OnClick" Background="Blue" Foreground="White" Width="50"/>
+                        <Button Grid.Column="4" Padding="2,0,2,0" Content="Hjemme" Click="ButtonReady_OnClick" Background="Green" Foreground="White"/>
+                        <Button Grid.Column="5" Padding="2,0,2,0" Content="Ude af drift" Click="ButtonOutOfService_OnClick" Background="Orange" Foreground="Black"></Button>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 namespace WhosHome.Logic
 {
-    public class StatusEnumToColorConverter : IValueConverter
+    public class StatusEnumToForegroundColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -16,22 +16,22 @@ namespace WhosHome.Logic
             switch ((StatusEnum)value)
             {
                 case StatusEnum.Free:
-                    return Brushes.Blue;
+                    return Brushes.White;
                     break;
                 case StatusEnum.Busy:
-                    return Brushes.Red;
+                    return Brushes.White;
                     break;
                 case StatusEnum.Home:
-                    return Brushes.Green;
+                    return Brushes.White;
                     break;
                 case StatusEnum.Service:
-                    return Brushes.Yellow;
+                    return Brushes.Black;
                     break;
                 case StatusEnum.OutOfService:
-                    return Brushes.Orange;
+                    return Brushes.Black;
                     break;
                 default:
-                    return Brushes.Green;
+                    return Brushes.White;
                     break;
             }
 
