@@ -114,5 +114,10 @@ namespace WhosHome
         {
             ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.OutOfService;
         }
+
+        private void DeleteVehicle_OnClick(object sender, RoutedEventArgs e)
+        {
+            Vehicles.Remove(((Vehicle) lbVehicle.SelectedItem));
+        }
     }
 }
