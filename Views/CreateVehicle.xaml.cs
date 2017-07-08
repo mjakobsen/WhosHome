@@ -12,6 +12,8 @@ namespace WhosHome.Views
     /// </summary>
     public partial class CreateVehicle : UserControl
     {
+       
+
         public ObservableCollection<KeyValuePair<VehicleTypeEnum, string>> VehicleTypeValues
         {
             get;
@@ -20,6 +22,8 @@ namespace WhosHome.Views
         public CreateVehicle()
         {
             InitializeComponent();
+
+
 
             VehicleTypeValues = new ObservableCollection<KeyValuePair<VehicleTypeEnum, string>>();
             VehicleTypeValues.Add(new KeyValuePair<VehicleTypeEnum, string>(VehicleTypeEnum.Fire, "Brand"));
