@@ -4,77 +4,80 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WhosHome.Logic;
+using WhosHome.Views;
 
 namespace WhosHome
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private ObservableCollection<Vehicle> _vehicles;
+        private readonly ObservableCollection<Vehicle> _vehicles = new ObservableCollection<Vehicle>();
+        private static MainWindow _mainWindow;
 
         public ObservableCollection<Vehicle> Vehicles
         {
             get { return _vehicles; }
-            set { _vehicles = value; }
+        }
+
+        public static MainWindow Instance
+        {
+            get { return _mainWindow; }
         }
 
         public MainWindow()
         {
             InitializeComponent();
-            Vehicles = new ObservableCollection<Vehicle>();
+            _mainWindow = this;
 
             Title = "StatusPanel";
-            Vehicles.Add(new Vehicle() { Name = "Ambulance 1", Status = StatusEnum.Home});
-            Vehicles.Add(new Vehicle() { Name = "Lægebil 1", Status = StatusEnum.Home});
-            Vehicles.Add(new Vehicle() { Name = "Brandbil 1", Status = StatusEnum.Home, Type = VehicleTypeEnum.Fire});
-            Vehicles.Add(new Vehicle() { Name = "Ambulance 2", Status = StatusEnum.Home });
-            Vehicles.Add(new Vehicle() { Name = "Lægebil 2", Status = StatusEnum.Home });
-            Vehicles.Add(new Vehicle() { Name = "Brandbil 2", Status = StatusEnum.Home, Type = VehicleTypeEnum.Fire});
-            Vehicles.Add(new Vehicle() { Name = "Ambulance 3", Status = StatusEnum.Home });
-            Vehicles.Add(new Vehicle() { Name = "Lægebil 3", Status = StatusEnum.Home });
-            Vehicles.Add(new Vehicle() { Name = "Brandbil 3", Status = StatusEnum.Home, Type = VehicleTypeEnum.Fire});
-            Vehicles.Add(new Vehicle() { Name = "Ambulance 4", Status = StatusEnum.Home });
-            Vehicles.Add(new Vehicle() { Name = "Lægebil 4", Status = StatusEnum.Home });
-            Vehicles.Add(new Vehicle() { Name = "Brandbil 4", Status = StatusEnum.Home, Type = VehicleTypeEnum.Fire});
-            Vehicles.Add(new Vehicle() { Name = "Ambulance 5", Status = StatusEnum.Home });
-            Vehicles.Add(new Vehicle() { Name = "Lægebil 5", Status = StatusEnum.Home });
-            Vehicles.Add(new Vehicle() { Name = "Brandbil 5", Status = StatusEnum.Home, Type = VehicleTypeEnum.Fire});
-            Vehicles.Add(new Vehicle() { Name = "Ambulance 6", Status = StatusEnum.Home });
-            Vehicles.Add(new Vehicle() { Name = "Lægebil 6", Status = StatusEnum.Home });
-            Vehicles.Add(new Vehicle() { Name = "Brandbil 6", Status = StatusEnum.Home, Type = VehicleTypeEnum.Fire});
-            Vehicles.Add(new Vehicle() { Name = "Ambulance 7", Status = StatusEnum.Home });
-            Vehicles.Add(new Vehicle() { Name = "Lægebil 7", Status = StatusEnum.Home });
 
             lbVehicle.ItemsSource = Vehicles;
+
+
+
+            LoadVehicles();
+        }
+
+        public void AddVehicle(Vehicle vehicle)
+        {
+            Vehicles.Add(vehicle);
+            LocalListBackup.SaveToFile();
         }
 
         private void ButtonBusy_OnClick(object sender, RoutedEventArgs e)
         {
             ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.Busy;
+            LocalListBackup.SaveToFile();
         }
 
         private void ButtonIdle_OnClick(object sender, RoutedEventArgs e)
         {
             ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.Free;
+            LocalListBackup.SaveToFile();
         }
 
         private void ButtonReady_OnClick(object sender, RoutedEventArgs a)
         {
             ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.Home;
+            LocalListBackup.SaveToFile();
+        }
+
+        private void ButtonService_OnClick(object sender, RoutedEventArgs e)
+        {
+            ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.Service;
+            LocalListBackup.SaveToFile();
+        }
+
+        private void ButtonOutOfService_OnClick(object sender, RoutedEventArgs e)
+        {
+            ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.OutOfService;
+            LocalListBackup.SaveToFile();
         }
 
         #region NotifyPropertyChange
@@ -105,19 +108,41 @@ namespace WhosHome
             item.IsSelected = true;
         }
 
-        private void ButtonService_OnClick(object sender, RoutedEventArgs e)
-        {
-            ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.Service;
-        }
-
-        private void ButtonOutOfService_OnClick(object sender, RoutedEventArgs e)
-        {
-            ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.OutOfService;
-        }
-
         private void DeleteVehicle_OnClick(object sender, RoutedEventArgs e)
         {
             Vehicles.Remove(((Vehicle) lbVehicle.SelectedItem));
+            LocalListBackup.SaveToFile();
+        }
+
+        private void CreateVehicle_Click(object sender, RoutedEventArgs e)
+        {
+            var view = new CreateVehicle();
+            var lwnd = new Window
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Content = view,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            };
+
+            lwnd.ShowDialog();
+        }
+
+        private void LoadVehicles()
+        {
+            try
+            {
+                Vehicles.Clear();
+                foreach (var vehicle in LocalListBackup.LoadFromFile())
+                {
+                    Vehicles.Add(vehicle);
+                }
+            }
+            catch (Exception ex)
+            {
+                Vehicles.Clear();
+            }
         }
     }
 }

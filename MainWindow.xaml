@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:WhosHome"
         xmlns:l="clr-namespace:WhosHome.Logic"
         mc:Ignorable="d"
-        SizeToContent="WidthAndHeight"
-        Title="MainWindow" Height="300" Width="300">
+        SizeToContent="WidthAndHeight">
     <Window.Resources>
         <l:StatusEnumToBackgroundColorConverter x:Key="StatusEnumToBackgroundColorConverter" />
         <l:StatusEnumToForegroundColorConverter x:Key="StatusEnumToForegroundColorConverter" />
@@ -19,9 +18,9 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
-            <MenuItem Header="Opret køretøj" />
+            <MenuItem Header="Opret køretøj" Click="CreateVehicle_Click"/>
         </Menu>
-        <ListBox Name="lbVehicle" Margin="0" Grid.Row="1" HorizontalContentAlignment="Stretch" Height="{Binding ElementName=LayoutRoot, Path=ActualHeight}" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch">
+        <ListBox Name="lbVehicle" Margin="0" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="0" Background="{Binding Status, Converter={StaticResource StatusEnumToBackgroundColorConverter}}" Width="Auto">

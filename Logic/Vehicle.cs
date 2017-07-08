@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq.Expressions;
+using System.Xml.Serialization;
 
 namespace WhosHome.Logic
 {
@@ -9,11 +10,11 @@ namespace WhosHome.Logic
         private string _name;
         private StatusEnum _status;
         private VehicleTypeEnum _type;
-        private double _visualHeight;
 
         public Vehicle()
         {
             Type = VehicleTypeEnum.Other;
+            Status = StatusEnum.Home;
         }
 
         public string Name
