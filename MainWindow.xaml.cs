@@ -39,8 +39,6 @@ namespace WhosHome
 
             lbVehicle.ItemsSource = Vehicles;
 
-
-
             LoadVehicles();
         }
 
@@ -79,28 +77,6 @@ namespace WhosHome
             ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.OutOfService;
             LocalListBackup.SaveToFile();
         }
-
-        #region NotifyPropertyChange
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyOfPropertyChange(string name)
-        {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(name));
-            }
-        }
-
-        protected void NotifyOfPropertyChange<T>(Expression<Func<T>> selectorExpression)
-        {
-            if (selectorExpression == null)
-                throw new ArgumentNullException("selectorExpression");
-            var body = selectorExpression.Body as MemberExpression;
-            if (body == null)
-                throw new ArgumentException("The body must be a member expression");
-            NotifyOfPropertyChange(body.Member.Name);
-        }
-        #endregion
 
         private void EventSetter_OnHandler(object sender, KeyboardFocusChangedEventArgs e)
         {
@@ -144,5 +120,27 @@ namespace WhosHome
                 Vehicles.Clear();
             }
         }
+
+        #region NotifyPropertyChange
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyOfPropertyChange(string name)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        protected void NotifyOfPropertyChange<T>(Expression<Func<T>> selectorExpression)
+        {
+            if (selectorExpression == null)
+                throw new ArgumentNullException("selectorExpression");
+            var body = selectorExpression.Body as MemberExpression;
+            if (body == null)
+                throw new ArgumentException("The body must be a member expression");
+            NotifyOfPropertyChange(body.Member.Name);
+        }
+        #endregion
     }
 }

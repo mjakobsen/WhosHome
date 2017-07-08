@@ -37,6 +37,6 @@
         <Label x:Name="NameRequiredError" Content="Angiv Venligst et navn" Foreground="Red" Visibility="Collapsed" Grid.Column="1" Grid.Row="2"/>
         <Label Content="Vælg bil type:" Grid.Column="1" Grid.Row="3" />
         <ComboBox x:Name="VehicleTypeCombo" DisplayMemberPath="Value" SelectedIndex="1" Grid.Column="1" Grid.Row="4"/>
-        <Button Grid.Column="1" Grid.Row="5" Content="Opret" Click="CreateBtn_Click" Margin="0,2,0,10"/>
+        <Button Grid.Column="1" Grid.Row="5" Content="Opret" Click="CreateBtn_Click" Margin="0,2,0,10" IsDefault="True"/>
     </Grid>
 </UserControl>
