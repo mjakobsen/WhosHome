@@ -4,11 +4,13 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using WhosHome.Logic;
 using WhosHome.Views;
+
 
 namespace WhosHome
 {
@@ -40,6 +42,8 @@ namespace WhosHome
             lbVehicle.ItemsSource = Vehicles;
 
             LoadVehicles();
+
+            ServiceHost sh = new ServiceHost()
         }
 
         public void AddVehicle(Vehicle vehicle)
