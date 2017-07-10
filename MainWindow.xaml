@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:WhosHome"
         xmlns:l="clr-namespace:WhosHome.Logic"
         mc:Ignorable="d"
-        SizeToContent="WidthAndHeight">
+        SizeToContent="WidthAndHeight"
+        Loaded="MainWindow_OnLoaded">
     <Window.Resources>
         <l:StatusEnumToBackgroundColorConverter x:Key="StatusEnumToBackgroundColorConverter" />
         <l:StatusEnumToForegroundColorConverter x:Key="StatusEnumToForegroundColorConverter" />

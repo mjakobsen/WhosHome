@@ -8,6 +8,7 @@ using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using WhosHome.Communication;
 using WhosHome.Logic;
 using WhosHome.Views;
 
@@ -43,7 +44,9 @@ namespace WhosHome
 
             LoadVehicles();
 
-            ServiceHost sh = new ServiceHost()
+
+            //ServiceHost sh = new ServiceHost(typeof(IServer), new[] {new Uri(string.Format("net.tcp://localhost:14654/"))});
+            //sh.Open();
         }
 
         public void AddVehicle(Vehicle vehicle)
@@ -125,6 +128,21 @@ namespace WhosHome
             }
         }
 
+        void ChoseCommunicationRole()
+        {
+            var view = new CommunicationRolePicker();
+            var lwnd = new Window
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Content = view,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            };
+
+            lwnd.ShowDialog();
+        }
+
         #region NotifyPropertyChange
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyOfPropertyChange(string name)
@@ -146,5 +164,10 @@ namespace WhosHome
             NotifyOfPropertyChange(body.Member.Name);
         }
         #endregion
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            ChoseCommunicationRole();
+        }
     }
 }
