@@ -38,9 +38,7 @@ namespace WhosHome
             InitializeComponent();
             _mainWindow = this;
 
-            Title = "StatusPanel";
-
-            lbVehicle.ItemsSource = Vehicles;
+            Title = "StatusPanel"; 
 
             LoadVehicles();
 
@@ -168,6 +166,21 @@ namespace WhosHome
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             ChoseCommunicationRole();
+        }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            var view = new About();
+            var lwnd = new Window
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Content = view,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            };
+
+            lwnd.ShowDialog();
         }
     }
 }

@@ -5,12 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WhosHome.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="50" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="50" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -18,12 +19,21 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Content="Vælg om du er server eller klient" Grid.Column="1" Grid.Row="0"/>
-        <UniformGrid Grid.Column="1" Grid.Row="1">
+        <UniformGrid Grid.Column="1" Grid.Row="1" Rows="1">
             <Button x:Name="ServerBtn" Content="Server" Click="ServerBtn_OnClick"/>
             <Button x:Name="ClientBtn" Content="Klient" Click="ClientBtn_OnClick"/>
         </UniformGrid>
-        <Grid x:Name="ServerContentGrid" Visibility="Collapsed" Grid.Column="1" Grid.Row="2">
-            <Label Content="Server" />
+        <Grid x:Name="ServerContentGrid" Visibility="Visible" Grid.Column="1" Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="Angiv et navn:" />
+            <TextBox Grid.Row="1" x:Name="ServerNameTxt"/>
+            <Label Grid.Row="2" Content="{Binding CurrentIpAdress}" />
+            <Button Grid.Row="3" Content="Start" Click="StartServer_Click"/>
         </Grid>
         <Grid x:Name="ClientContentGrid" Visibility="Collapsed" Grid.Column="1" Grid.Row="2">
             <Label Content="Klient" />
