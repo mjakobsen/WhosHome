@@ -38,19 +38,26 @@ namespace WhosHome
             InitializeComponent();
             _mainWindow = this;
 
-            Title = "StatusPanel"; 
+            RealTtitle = "StatusPanel"; 
 
             LoadVehicles();
-
-
-            //ServiceHost sh = new ServiceHost(typeof(IServer), new[] {new Uri(string.Format("net.tcp://localhost:14654/"))});
-            //sh.Open();
         }
 
         public void AddVehicle(Vehicle vehicle)
         {
             Vehicles.Add(vehicle);
             LocalListBackup.SaveToFile();
+        }
+        private string _realTitle;
+        public string RealTtitle
+        {
+            get { return _realTitle; }
+            set
+            {
+                if (_realTitle == value) return;
+                _realTitle = value;
+                NotifyOfPropertyChange(() => RealTtitle);
+            }
         }
 
         private void ButtonBusy_OnClick(object sender, RoutedEventArgs e)
@@ -137,6 +144,26 @@ namespace WhosHome
                 SizeToContent = SizeToContent.WidthAndHeight,
                 ResizeMode = ResizeMode.NoResize
             };
+            view.Win = lwnd;
+            lwnd.ShowDialog();
+        }
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            ChoseCommunicationRole();
+        }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            var view = new About();
+            var lwnd = new Window
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Content = view,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            };
 
             lwnd.ShowDialog();
         }
@@ -162,25 +189,5 @@ namespace WhosHome
             NotifyOfPropertyChange(body.Member.Name);
         }
         #endregion
-
-        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            ChoseCommunicationRole();
-        }
-
-        private void About_Click(object sender, RoutedEventArgs e)
-        {
-            var view = new About();
-            var lwnd = new Window
-            {
-                Owner = this,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                Content = view,
-                SizeToContent = SizeToContent.WidthAndHeight,
-                ResizeMode = ResizeMode.NoResize
-            };
-
-            lwnd.ShowDialog();
-        }
     }
 }

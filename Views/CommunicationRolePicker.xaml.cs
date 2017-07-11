@@ -5,18 +5,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WhosHome.Logic;
+using WhosHome.Communication;
 
 namespace WhosHome.Views
 {
@@ -31,6 +24,8 @@ namespace WhosHome.Views
             CurrentIpAdress = NetworkHelper.GetCurrentIpAdress();
             MinHeight = 150;
         }
+
+        public Window Win { get; set; }
 
         private void ServerBtn_OnClick(object sender, RoutedEventArgs e)
         {
@@ -58,7 +53,18 @@ namespace WhosHome.Views
 
         private void StartServer_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(ServerNameTxt.Text)) return;
+            MainWindow.Instance.RealTtitle = ServerNameTxt.Text;
+            ServiceHost sh = new ServiceHost(typeof(Server), new[] { new Uri(string.Format("net.tcp://localhost:14654/")) });
+            sh.Open();
+            Win.Close();
+        }
 
+        private void StartClient_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(ClientIpTxt.Text)) return;
+            
+            Win.Close();
         }
 
         #region NotifyPropertyChange

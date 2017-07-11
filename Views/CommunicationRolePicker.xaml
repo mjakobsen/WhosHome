@@ -36,7 +36,14 @@
             <Button Grid.Row="3" Content="Start" Click="StartServer_Click"/>
         </Grid>
         <Grid x:Name="ClientContentGrid" Visibility="Collapsed" Grid.Column="1" Grid.Row="2">
-            <Label Content="Klient" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="Skriv IP adresse:" />
+            <TextBox Grid.Row="1" x:Name="ClientIpTxt" />
+            <Button Grid.Row="2" Content="Start" Click="StartClient_Click" />
         </Grid>
     </Grid>
 </UserControl>

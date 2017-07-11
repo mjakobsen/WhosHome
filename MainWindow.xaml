@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
         Loaded="MainWindow_OnLoaded"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Title="{Binding RealTitle, Mode=OneWay}">
     <Window.Resources>
         <l:StatusEnumToBackgroundColorConverter x:Key="StatusEnumToBackgroundColorConverter" />
         <l:StatusEnumToForegroundColorConverter x:Key="StatusEnumToForegroundColorConverter" />
