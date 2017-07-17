@@ -12,14 +12,25 @@ namespace WhosHome.Logic
     public static class LocalListBackup
     {
         static string _filePath = @"WhosHome.txt";
+        private static object _lockObject = new object();
 
         public static void SaveToFile()
         {
-            if (File.Exists(_filePath))
+            lock (_lockObject)
             {
-                File.Delete(_filePath);
+                try
+                {
+                    if (File.Exists(_filePath))
+                    {
+                        File.Delete(_filePath);
+                    }
+                    SerializeObjectToXML(MainWindow.Instance.Vehicles);
+                }
+                catch (Exception)
+                {                    
+                }
             }
-            SerializeObjectToXML(MainWindow.Instance.Vehicles);
+
         }
 
         private static void SerializeObjectToXML<T>(T item)
@@ -37,10 +48,16 @@ namespace WhosHome.Logic
 
             try
             {
-                XmlSerializer xs = new XmlSerializer(typeof(ObservableCollection<Vehicle>));
-                using (StreamReader sr = new StreamReader(_filePath))
+                lock (_lockObject)
                 {
-                    result = (ObservableCollection<Vehicle>)xs.Deserialize(sr);
+                    if (File.Exists(_filePath))
+                    {
+                        XmlSerializer xs = new XmlSerializer(typeof(ObservableCollection<Vehicle>));
+                        using (StreamReader sr = new StreamReader(_filePath))
+                        {
+                            result = (ObservableCollection<Vehicle>)xs.Deserialize(sr);
+                        }
+                    }
                 }
             }
             catch (Exception ex)

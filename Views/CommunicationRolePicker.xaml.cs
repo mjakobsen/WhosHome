@@ -94,14 +94,23 @@ namespace WhosHome.Views
         private void StartClient_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(ClientIpTxt.Text)) return;
-            
-            var client = new Client();
 
-            client.CreateClientSession(ClientIpTxt.Text);
+            try
+            {
+                var client = new Client();
 
-            MainWindow.Instance.Client = client;
+                var result = client.CreateClientSession(ClientIpTxt.Text);
 
-            MainWindow.Instance.Title = client.ServerTitle;
+                if (!result) Environment.Exit(0);
+
+                MainWindow.Instance.Client = client;
+
+                MainWindow.Instance.Title = client.ServerTitle;
+            }
+            catch (Exception)
+            {
+                Environment.Exit(0);
+            }
 
             Win.Close();
         }

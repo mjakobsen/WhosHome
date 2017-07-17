@@ -11,6 +11,9 @@ namespace WhosHome.Communication
         string GetTitle();
 
         [OperationContract]
+        ObservableCollection<Vehicle> GetList();
+
+        [OperationContract(IsOneWay = true)]
         void HandleAction(ObservableCollection<Vehicle> newList);
     }
 }

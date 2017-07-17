@@ -22,7 +22,7 @@ namespace WhosHome
     {
         private readonly ObservableCollection<Vehicle> _vehicles = new ObservableCollection<Vehicle>();
         private static MainWindow _mainWindow;
-
+        public event OnMainWindowVehiclesChangedHandler OnMainWindowVehiclesChanged;
         public ObservableCollection<Vehicle> Vehicles
         {
             get { return _vehicles; }
@@ -35,7 +35,18 @@ namespace WhosHome
 
         public Client Client { get; set; }
 
-        public bool ServerMode { get; set; }
+        private bool _serverMode;
+
+        public bool ServerMode
+        {
+            get { return _serverMode; }
+            set
+            {
+                if (_serverMode == value) return;
+                _serverMode = value;
+                NotifyOfPropertyChange(() => ServerMode);
+            }
+        }
 
         public MainWindow()
         {
@@ -109,6 +120,11 @@ namespace WhosHome
                 Vehicles.Add(vehicle);
             }
             LocalListBackup.SaveToFile();
+
+            if (ServerMode)
+            {
+                UpdateClients();
+            }
         }
 
         private void HandleChange()
@@ -116,12 +132,18 @@ namespace WhosHome
             LocalListBackup.SaveToFile();
             if (ServerMode)
             {
-
+                UpdateClients();
             }
             else
             {
                 Client.HandleAction(Vehicles);
             }
+        }
+
+        private void UpdateClients()
+        {
+            var handler = OnMainWindowVehiclesChanged;
+            if (handler != null) handler.Invoke();
         }
 
         private void CreateVehicle_Click(object sender, RoutedEventArgs e)

@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
             <MenuItem Header="Opret køretøj" Click="CreateVehicle_Click"/>
-            <MenuItem Header="Om" Click="About_Click" />
+            <MenuItem Header="Om" Click="About_Click" Visibility="{Binding ServerMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
         </Menu>
         <ListBox ItemsSource="{Binding Vehicles}" Name="lbVehicle" Margin="0" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch">
             <ListBox.ItemTemplate>

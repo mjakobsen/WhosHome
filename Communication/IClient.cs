@@ -4,12 +4,10 @@ using WhosHome.Logic;
 
 namespace WhosHome.Communication
 {
+    [ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(IServer))]
     public interface IClient
     {
         [OperationContract]
-        void UpdateList();
-
-        [OperationContract]
-        void HandleAction(ObservableCollection<Vehicle> newList);
+        void UpdateList(ObservableCollection<Vehicle> newList);
     }
 }

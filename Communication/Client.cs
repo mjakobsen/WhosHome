@@ -11,13 +11,14 @@ using WhosHome.Logic;
 
 namespace WhosHome.Communication
 {
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class Client: IClient
     {
         private IServer WhosHomeServer { get; set; }
         public string ServerTitle { get; set; }
-        public void UpdateList()
+        public void UpdateList(ObservableCollection<Vehicle> newList)
         {
-            
+            MainWindow.Instance.UpdateList(newList);
         }
 
         public bool CreateClientSession(string serverIpAdress)
@@ -40,13 +41,14 @@ namespace WhosHome.Communication
 
             binding.ReliableSession.InactivityTimeout = TimeSpan.MaxValue;
 
-            var channel = new DuplexChannelFactory<IServer>(this, binding, new EndpointAddress(string.Format("net.tcp://{0}:{1}/WhosHomeHost",serverIpAdress ,NetworkHelper.GetPort())));
+            var channel = new DuplexChannelFactory<IServer>(this, binding, new EndpointAddress(string.Format("net.tcp://{0}:{1}/WhosHomeHost", serverIpAdress, NetworkHelper.GetPort())));
 
             try
             {
                 WhosHomeServer = channel.CreateChannel();
                 ((IClientChannel)WhosHomeServer).Open();
                 ServerTitle = WhosHomeServer.GetTitle();
+                UpdateList(WhosHomeServer.GetList());
             }
             catch (EndpointNotFoundException)
             {
@@ -57,7 +59,14 @@ namespace WhosHome.Communication
 
         public void HandleAction(ObservableCollection<Vehicle> newList)
         {
-            WhosHomeServer.HandleAction(newList);
+            try
+            {
+                WhosHomeServer.HandleAction(newList);
+            }
+            catch (Exception)
+            {
+
+            }
         }
     }
 }
