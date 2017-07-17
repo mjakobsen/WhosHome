@@ -4,10 +4,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Net.Security;
 using System.Net.Sockets;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml;
 using WhosHome.Logic;
 using WhosHome.Communication;
 
@@ -54,9 +56,38 @@ namespace WhosHome.Views
         private void StartServer_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(ServerNameTxt.Text)) return;
-            MainWindow.Instance.RealTtitle = ServerNameTxt.Text;
-            ServiceHost sh = new ServiceHost(typeof(Server), new[] { new Uri(string.Format("net.tcp://localhost:14654/")) });
-            sh.Open();
+            MainWindow.Instance.Title = ServerNameTxt.Text;
+            ServiceHost sh = new ServiceHost(typeof(Server), new[] { new Uri(string.Format("net.tcp://localhost:{0}/", NetworkHelper.GetPort())) });
+            var newEndpoint = new NetTcpBinding
+            {
+                MaxReceivedMessageSize = Int32.MaxValue,
+                Security = new NetTcpSecurity { Message = new MessageSecurityOverTcp { ClientCredentialType = MessageCredentialType.None }, Mode = SecurityMode.None, Transport = new TcpTransportSecurity { ClientCredentialType = TcpClientCredentialType.None, ProtectionLevel = ProtectionLevel.None } },
+                ReaderQuotas = new XmlDictionaryReaderQuotas
+                {
+                    MaxArrayLength = Int32.MaxValue,
+                    MaxBytesPerRead = Int32.MaxValue,
+                    MaxDepth = Int32.MaxValue,
+                    MaxNameTableCharCount = Int32.MaxValue,
+                    MaxStringContentLength = Int32.MaxValue,
+                },
+                ReceiveTimeout = TimeSpan.MaxValue,
+                SendTimeout = TimeSpan.MaxValue,
+            };
+            //newEndpoint.ReliableSession.Enabled = true;
+            newEndpoint.ReliableSession.InactivityTimeout = TimeSpan.MaxValue;
+            sh.AddServiceEndpoint(typeof(IServer), newEndpoint, "WhosHomeHost");
+
+            try
+            {
+                sh.Open();
+            }
+            catch (Exception)
+            {
+                Environment.Exit(0);
+            }
+
+            MainWindow.Instance.ServerMode = true;
+
             Win.Close();
         }
 
@@ -64,6 +95,14 @@ namespace WhosHome.Views
         {
             if (string.IsNullOrWhiteSpace(ClientIpTxt.Text)) return;
             
+            var client = new Client();
+
+            client.CreateClientSession(ClientIpTxt.Text);
+
+            MainWindow.Instance.Client = client;
+
+            MainWindow.Instance.Title = client.ServerTitle;
+
             Win.Close();
         }
 

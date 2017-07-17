@@ -18,10 +18,10 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Content="Vælg om du er server eller klient" Grid.Column="1" Grid.Row="0"/>
+        <Label Content="Vælg om du er 1 eller 2" Grid.Column="1" Grid.Row="0"/>
         <UniformGrid Grid.Column="1" Grid.Row="1" Rows="1">
-            <Button x:Name="ServerBtn" Content="Server" Click="ServerBtn_OnClick"/>
-            <Button x:Name="ClientBtn" Content="Klient" Click="ClientBtn_OnClick"/>
+            <Button x:Name="ServerBtn" Content="1" Click="ServerBtn_OnClick"/>
+            <Button x:Name="ClientBtn" Content="2" Click="ClientBtn_OnClick"/>
         </UniformGrid>
         <Grid x:Name="ServerContentGrid" Visibility="Visible" Grid.Column="1" Grid.Row="2">
             <Grid.RowDefinitions>

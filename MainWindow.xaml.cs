@@ -33,12 +33,16 @@ namespace WhosHome
             get { return _mainWindow; }
         }
 
+        public Client Client { get; set; }
+
+        public bool ServerMode { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
             _mainWindow = this;
 
-            RealTtitle = "StatusPanel"; 
+            Title = "StatusPanel"; 
 
             LoadVehicles();
         }
@@ -46,48 +50,37 @@ namespace WhosHome
         public void AddVehicle(Vehicle vehicle)
         {
             Vehicles.Add(vehicle);
-            LocalListBackup.SaveToFile();
-        }
-        private string _realTitle;
-        public string RealTtitle
-        {
-            get { return _realTitle; }
-            set
-            {
-                if (_realTitle == value) return;
-                _realTitle = value;
-                NotifyOfPropertyChange(() => RealTtitle);
-            }
+            HandleChange();
         }
 
         private void ButtonBusy_OnClick(object sender, RoutedEventArgs e)
         {
             ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.Busy;
-            LocalListBackup.SaveToFile();
+            HandleChange();
         }
 
         private void ButtonIdle_OnClick(object sender, RoutedEventArgs e)
         {
             ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.Free;
-            LocalListBackup.SaveToFile();
+            HandleChange();
         }
 
         private void ButtonReady_OnClick(object sender, RoutedEventArgs a)
         {
             ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.Home;
-            LocalListBackup.SaveToFile();
+            HandleChange();
         }
 
         private void ButtonService_OnClick(object sender, RoutedEventArgs e)
         {
             ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.Service;
-            LocalListBackup.SaveToFile();
+            HandleChange();
         }
 
         private void ButtonOutOfService_OnClick(object sender, RoutedEventArgs e)
         {
             ((Vehicle)lbVehicle.SelectedItem).Status = StatusEnum.OutOfService;
-            LocalListBackup.SaveToFile();
+            HandleChange();
         }
 
         private void EventSetter_OnHandler(object sender, KeyboardFocusChangedEventArgs e)
@@ -99,7 +92,36 @@ namespace WhosHome
         private void DeleteVehicle_OnClick(object sender, RoutedEventArgs e)
         {
             Vehicles.Remove(((Vehicle) lbVehicle.SelectedItem));
+            HandleChange();
+        }
+
+        public void UpdateList(ObservableCollection<Vehicle> newList)
+        {
+            if (!Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.Invoke(() => UpdateList(newList));
+                return;
+            }
+
+            Vehicles.Clear();
+            foreach (var vehicle in newList)
+            {
+                Vehicles.Add(vehicle);
+            }
             LocalListBackup.SaveToFile();
+        }
+
+        private void HandleChange()
+        {
+            LocalListBackup.SaveToFile();
+            if (ServerMode)
+            {
+
+            }
+            else
+            {
+                Client.HandleAction(Vehicles);
+            }
         }
 
         private void CreateVehicle_Click(object sender, RoutedEventArgs e)

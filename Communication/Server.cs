@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using WhosHome.Logic;
 
 namespace WhosHome.Communication
 {
@@ -15,7 +17,12 @@ namespace WhosHome.Communication
             var client = OperationContext.Current.GetCallbackChannel<IClient>();
             _clients.Add(client);
 
-            return "Hello word";
+            return MainWindow.Instance.Title;
+        }
+
+        public void HandleAction(ObservableCollection<Vehicle> newList)
+        {
+            MainWindow.Instance.UpdateList(newList);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.ServiceModel;
+﻿using System.Collections.ObjectModel;
+using System.ServiceModel;
+using WhosHome.Logic;
 
 namespace WhosHome.Communication
 {
@@ -7,5 +9,8 @@ namespace WhosHome.Communication
     {
         [OperationContract]
         string GetTitle();
+
+        [OperationContract]
+        void HandleAction(ObservableCollection<Vehicle> newList);
     }
 }

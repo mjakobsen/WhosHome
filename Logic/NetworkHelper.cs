@@ -21,5 +21,10 @@ namespace WhosHome.Logic
             }
             return localIP;
         }
+
+        public static string GetPort()
+        {
+            return "14654";
+        }
     }
 }
