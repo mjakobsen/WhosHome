@@ -30,7 +30,6 @@ namespace WhosHome.Logic
                 {                    
                 }
             }
-
         }
 
         private static void SerializeObjectToXML<T>(T item)
